@@ -198,6 +198,12 @@ class Server(object):
         self._server = BaseHTTPServer.HTTPServer
         self._httpd = self._server((self._host, self._port), handler)
 
+        self._init_db()
+
+    def _init_db(self):
+        pg_conn = pg.pg(" ".join(["%s='%s'" % (k, v) for k, v in self._db_conn.iteritems()]))
+        pg_conn.sql_exec(self._sql_init)
+
     def _get_sqls(self):
         def read_file(file_name):
             with open(file_name, 'r') as f:
