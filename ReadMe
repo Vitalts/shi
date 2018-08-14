@@ -1,0 +1,11 @@
+run docker container
+
+sudo docker run --name <container name> --restart=always -d \
+-p <external port>:8080 \
+-e log_level='<log level>' \
+-e db_host='<db host>' \
+-e db_port='<db port>' \
+-e db_name='<db name>' \
+-e db_user='<db user>' \
+-e db_pass='<db pass>' \
+<image name>
