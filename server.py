@@ -117,7 +117,7 @@ class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             pg_conn.sql_exec(self._compose_insert_sql(data))
 
     def _compose_insert_sql(self, data):
-        lines = ['select %s' % (', '.join([("'%s'" % rr) if i < 2 else rr for rr in r])) for i, r in enumerate(data)]
+        lines = ['select %s' % (', '.join([("'%s'" % r) if i < 2 else r for i, r in enumerate(row)])) for row in data]
         return self._sql_insert.replace('%DATA%', '\nunion all\n'.join(lines))
 
     @staticmethod
