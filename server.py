@@ -229,9 +229,9 @@ def main():
     main_file_name = '.'.join(os.path.abspath(__file__).split('.')[:-1])
     config_file = '%s.%s' % (main_file_name, 'json')
     # noinspection SpellCheckingInspection
-    default_config = {"log level": os.environ.get('log_level', 'debug'),
+    default_config = {"log level": os.environ.get('log_level', 'info'),
                       'server': {'host': os.environ.get('host', '0.0.0.0'),
-                                 'port': os.environ.get('port', '8080')},
+                                 'port': os.environ.get('port', '80')},
                       'db': {'host': os.environ.get('db_host', '127.0.0.1'),
                              'port': int(os.environ.get('db_port', '5432')),
                              'dbname': os.environ.get('db_name', 'measurement'),

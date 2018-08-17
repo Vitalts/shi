@@ -9,19 +9,36 @@ import shutil
 # noinspection PyAttributeOutsideInit,PyPep8Naming
 class TestServer(unittest.TestCase):
     def setUp(self):
+        # paths
         self._path = os.path.dirname(os.path.abspath(__file__))
         self._server_path = os.path.join(*os.path.split(self._path)[:-1])
 
-        self._module_psycopg2_dest = '../psycopg2.py'
+        # set test os.environs
+        self._os_environ_test = {'log_level': 'debug',
+                                 'port': '8080'}
+        self._os_environ = {k: os.environ.get(k, None) for k in self._os_environ_test.iterkeys()}
+        for k, v in self._os_environ_test.iteritems():
+            os.environ[k] = v
 
+        # mock psycopg2
+        self._module_psycopg2_dest = '../psycopg2.py'
         shutil.copy(self._module_psycopg2_dest[1:], self._module_psycopg2_dest)
         self._server = subprocess.Popen(['python', os.path.join(self._server_path, 'server.py')])
 
     def tearDown(self):
+        # kill server
         os.kill(self._server.pid, signal.SIGTERM)
 
         self._path = ''
 
+        # rollback os.environs
+        for k, v in self._os_environ.iteritems():
+            if v is None:
+                del os.environ[k]
+            else:
+                os.environ[k] = v
+
+        # remove psycopg2
         for r in [self._module_psycopg2_dest, '%sc' % self._module_psycopg2_dest]:
             if os.path.isfile(r):
                 os.remove(r)
